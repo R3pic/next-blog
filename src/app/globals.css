@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --sidebar-size: calc((100vw - 54rem) / 2);
+    --sidebar-margin: calc(54rem + (100vw - 54rem) / 2);
+    --pagewidth-desktop: calc(max(min(100vw - 18rem - 2rem, 54rem), 44rem));
+}
+
+nav {
+    scrollbar-gutter: stable;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
