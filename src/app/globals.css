@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --sidebar-size: calc((100vw - 54rem) / 2);
+    --sidebar-margin: calc(54rem + (100vw - 54rem) / 2);
+    --pagewidth-desktop: calc(max(min(100vw - 18rem - 2rem, 54rem), 44rem));
+    /* 검색 (Pagefind 관련 옵션)*/
+    --pagefind-ui-scale: 1;
+    --pagefind-ui-primary: #034ad8;
+    --pagefind-ui-text: #393939;
+    --pagefind-ui-background: #ffffff;
+    --pagefind-ui-border: #eeeeee;
+    --pagefind-ui-tag: #eeeeee;
+    --pagefind-ui-border-width: 2px;
+    --pagefind-ui-border-radius: 8px;
+    --pagefind-ui-image-border-radius: 8px;
+    --pagefind-ui-image-box-ratio: 16 / 9;
+    --pagefind-ui-font: jpRg, KrRg !important;
+}
+
+:root.dark {
+    --pagefind-ui-primary: #eeeeee;
+    --pagefind-ui-text: #aaa;
+    --pagefind-ui-background: #1E1E1F;
+    --pagefind-ui-border: #3A3A3A;
+    --pagefind-ui-tag: #3A3A3A;
+}
+
+.pagefind-ui__result-thumb {
+    max-width: 300px !important;
+}
+
+html {
+    overflow-y: overlay;
+}
+
+nav {
+    scrollbar-gutter: stable;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* 코드 블럭 css*/
+pre {
+  @apply !px-0 rounded-lg;
+}
+
+pre code {
+  counter-reset: line;
+}
+
+pre code > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+  @apply inline-block w-4 mr-4 text-right text-gray-500;
+}
+
+pre [data-line] {
+  @apply px-4 border-l-4 border-l-transparent;
+}
+
+pre [data-highlighted-line] {
+  background: rgba(200, 200, 255, 0.1);
+  @apply border-l-blue-400;
+}
+
+pre button {
+  display: none;
+}
+
+pre:hover button {
+  display: block;
+}
+
+[data-highlighted-chars] {
+  @apply bg-zinc-600/50 rounded;
+  box-shadow: 0 0 0 4px rgb(82 82 91 / 0.5);
+}
+
+[data-chars-id] {
+  @apply shadow-none p-1 border-b-2;
+}
+
+[data-chars-id] span {
+  @apply !text-inherit;
+}
+
+[data-chars-id='v'] {
+  @apply !text-pink-300 bg-rose-800/50 border-b-pink-600 font-semibold;
+}
+
+[data-chars-id='s'] {
+  @apply !text-yellow-300 bg-yellow-800/50 border-b-yellow-600 font-semibold;
+}
+
+[data-chars-id='i'] {
+  @apply !text-purple-200 bg-purple-800/50 border-b-purple-600 font-semibold;
+}
+
+[data-rehype-pretty-code-title] {
+  @apply bg-zinc-700 text-zinc-200 rounded-t-lg pt-2 pb-1 px-3;
+}
+
+figure[data-rehype-pretty-code-figure]:has(> [data-rehype-pretty-code-title])
+  pre {
+  @apply !rounded-t-none;
+}
+
+figure[data-rehype-pretty-code-figure] {
+  @apply mt-0
+}

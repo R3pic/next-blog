@@ -1,0 +1,5 @@
+{
+    "rewrites": [
+      { "source": "/category/:path*", "destination": "/category/:path*/index.html" }
+    ]
+  }
