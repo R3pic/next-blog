@@ -13,6 +13,7 @@ export default function LeftSidebar() {
       <div className="fixed flex flex-col flex-nowrap items-end top-0 h-screen bg-transport
       lg:w-sidebar-min
       desktop:w-sidebar-size
+      z-20
       "
       data-pagefind-ignore='all'>
         {/* 배너 */}

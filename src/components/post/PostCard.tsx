@@ -47,7 +47,7 @@ export default function PostCard({ thumbnail, title, date, category, description
           <Link className="text-yellow-500 lg:text-yellow-500 hover:text-red-400" href={href}>{title}</Link> 
         </p>
         <p className='mb-0 h-14 lg:m-2 line-clamp-2'>
-          <Link className="text-light-foreground lg:text-light-foreground dark:text-dark-foreground"href={href}>{description}</Link>
+          <Link className="text-light-foreground lg:text-light-foreground dark:text-dark-foreground hover:no-underline"href={href}>{description}</Link>
         </p>
         <p className='mt-auto mb-0 whitespace-nowrap'>
           <Link className='text-green-600 lg:text-green-600' href={`/category/${category.path}`}>{ category.display }</Link> · { formatDateString(date) }
