@@ -3,9 +3,10 @@ import { useState } from 'react';
 import Icon from '../ui/Icon';
 import RootNavItem from './RootNavItem';
 import Link from 'next/link';
+import { CategoryNode } from 'r3-blog';
 
 interface Props {
-  allCategory: Category[]
+  allCategory: CategoryNode[]
 }
 
 export default function Navigation({ allCategory }: Props) {

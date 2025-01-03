@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Icon from '../ui/Icon';
-import { getCategoryChain } from '@/libs/blog';
+import { CategoryService } from 'r3-blog';
 
 interface PostCategoryTreeProps {
   title?: string;
@@ -19,8 +19,8 @@ export default function CategoryTree({ categoryPath, title }: PostCategoryTreePr
           홈
         </Link>
       );
-    // 카테고리가 있다면
-    const categoryChain = getCategoryChain(categoryPath);
+    const categoryService = new CategoryService();
+    const categoryChain = categoryService.getCategoryChain(categoryPath);
     return categoryChain.map((category) => {
       return [
         <Link

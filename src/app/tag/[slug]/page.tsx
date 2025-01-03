@@ -1,7 +1,7 @@
 import PostList from '@/components/post/PostList';
-import { getAllPostFromTag, getAllTag } from '@/libs/blog';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next/types';
+import { CategoryService, PostService, TagService } from 'r3-blog';
 
 interface Params {
   slug: string;
@@ -24,7 +24,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export async function generateStaticParams(): Promise<Params[]> {
   const paths: Params[] = [];
-  const allTags = getAllTag();
+  const postService = new PostService();
+  const tagService = new TagService(postService.getAllPost());
+  const allTags = tagService.getAllTag();
 
   allTags.forEach((tag) => {
     const slug = process.env.NODE_ENV === 'development' ? encodeURIComponent(tag) : tag;
@@ -38,8 +40,10 @@ export async function generateStaticParams(): Promise<Params[]> {
 
 export default async function CategoryPage({ params }: Props) {
   const { slug } = await params;
+  const postService = new PostService();
+  const tagService = new TagService(postService.getAllPost());
   const tag = decodeURIComponent(slug);
-  const posts = getAllPostFromTag(tag);
+  const posts = tagService.getAllPost(tag, new CategoryService());
   
   if (posts === undefined)
     notFound();

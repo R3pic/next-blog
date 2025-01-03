@@ -2,11 +2,10 @@ import ContentWindow from '@/components/ContentWindow';
 import CategoryTree from '@/components/post/CategoryTree';
 import PostList from '@/components/post/PostList';
 import RightSidebar from '@/components/sidebar/RightSidebar';
-import { getAllPost } from '@/libs/blog';
-import React from 'react';
+import { CategoryService, PostService } from 'r3-blog';
 
 export default async function Home() {
-  const allPosts = getAllPost();
+  const allPosts = new PostService().getAllPost(new CategoryService());
   return (
     <>
       <ContentWindow>

@@ -2,11 +2,12 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Icon from '../ui/Icon';
+import type { CategoryNode } from 'r3-blog';
 
 interface RootNavItemProps {
   display: string;
   href: string;
-  subCategories: Category[];
+  subCategories: CategoryNode[];
   onClick: () => void;
 }
 

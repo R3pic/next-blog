@@ -8,7 +8,7 @@ interface PostTitleProps {
   categoryPath: string;
   categoryDisplay: string;
   date: Date;
-  thumbnail: string | null;
+  thumbnail: string | undefined;
 }
 
 export default function PostTitle({ title, categoryPath, categoryDisplay, date, thumbnail }: PostTitleProps) {

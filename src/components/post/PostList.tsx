@@ -1,9 +1,10 @@
 'use client';
 import { useState } from 'react';
 import PostCard from './PostCard';
+import type { DetailPost } from 'r3-blog';
 
 interface PostListProps {
-  posts: Post[] | undefined;
+  posts: DetailPost[] | undefined;
 }
 
 export default function PostList({ posts }: PostListProps) {

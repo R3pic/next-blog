@@ -1,8 +1,8 @@
 import CategoryTree from '@/components/post/CategoryTree';
 import PostList from '@/components/post/PostList';
-import { getAllCategoryPath, getCategory, getPostFromCategory } from '@/libs/blog';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { CategoryService, PostService } from 'r3-blog';
 
 interface CategoryParams {
   slug: string[]
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export async function generateStaticParams(): Promise<CategoryParams[]> {
   const paths: CategoryParams[] = [];
-  const allCategoryPath = getAllCategoryPath();
+  const allCategoryPath = new CategoryService().getAllCategoryPath();
 
   allCategoryPath.forEach((path) => {
     const slug = process.env.NODE_ENV === 'development' ? path.split('/').map(encodeURIComponent) : path.split('/');
@@ -40,8 +40,9 @@ export async function generateStaticParams(): Promise<CategoryParams[]> {
 export default async function CategoryPage({ params }: PageProps) {
   const { slug } = await params;
   const categoryPath = slug.map(decodeURIComponent).join('/');
-  const category = getCategory(categoryPath);
-  const posts = getPostFromCategory(categoryPath);
+  const categoryService = new CategoryService();
+  const category = categoryService.getCategory(categoryPath);
+  const posts = categoryService.injection(new PostService()).getAllPost(categoryPath);
   
   if (category === undefined)
     notFound();

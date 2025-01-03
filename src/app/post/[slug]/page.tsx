@@ -8,9 +8,9 @@ import remarkgfm from 'remark-gfm';
 import remarkGemoji from 'remark-gemoji';
 import { Metadata } from 'next/types';
 import TagBox from '@/components/post/TagBox';
-import { getAllPost, getPost } from '@/libs/blog';
 import { components } from '@/components/MDX';
 import rehypePrettyCode from 'rehype-pretty-code';
+import { CategoryService, PostService } from 'r3-blog';
 
 interface PostParams {
   slug: string
@@ -22,8 +22,8 @@ interface PostProps {
 
 export async function generateMetadata({ params }: PostProps): Promise<Metadata> {
   const { slug } = await params;
-
-  const post = getPost(slug);
+  const postService = new PostService();
+  const post = postService.getPost(slug);
 
   return {
     title: post?.title,
@@ -33,7 +33,8 @@ export async function generateMetadata({ params }: PostProps): Promise<Metadata>
 
 export async function generateStaticParams(): Promise<PostParams[]> {
   const paths: PostParams[] = [];
-  const allPosts = getAllPost();
+  const postService = new PostService();
+  const allPosts = postService.getAllPost();
 
   allPosts.forEach(({ slug }) => {
     paths.push({
@@ -46,7 +47,10 @@ export async function generateStaticParams(): Promise<PostParams[]> {
 
 export default async function PostPage({ params }: PostProps) {
   const { slug } = await params;
-  const post = getPost(decodeURIComponent(slug));
+  const postService = new PostService();
+  const categoryService = new CategoryService();
+  const post = postService.getPost(decodeURIComponent(slug));
+  const category = categoryService.getCategory(post.category);
 
   if (!post)
     notFound();
@@ -56,7 +60,7 @@ export default async function PostPage({ params }: PostProps) {
       {/* 카테고리 트리 */}
       <CategoryTree
         title={post.title}
-        categoryPath={post.category.path}
+        categoryPath={category.path}
       />
       {/* 게시글 헤더 (제목 및 사진 포스트 날짜) */}
       <main data-pagefind-body>
@@ -64,8 +68,8 @@ export default async function PostPage({ params }: PostProps) {
           title={post.title}
           thumbnail={post.thumbnail}
           date={post.date}
-          categoryPath={post.category.path}
-          categoryDisplay={post.category.display}
+          categoryPath={category.path}
+          categoryDisplay={category.display}
         />
         <div className='p-8 flex flex-col grow break-keep'>
           <MDXRemote

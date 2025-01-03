@@ -2,11 +2,10 @@ import Link from 'next/link';
 import Image from 'next-export-optimize-images/image';
 import ProfileImage from '../../../public/profile.webp';
 import Navigation from './Navigation';
-import { getAllRootCategory } from '@/libs/blog';
+import { CategoryService } from 'r3-blog';
 
 export default function LeftSidebar() {
-  const allCategory = getAllRootCategory();
-
+  const allCategory = new CategoryService().getAllRootCategory();
   return (
     <>
       {/* 좌측 사이드바 */}

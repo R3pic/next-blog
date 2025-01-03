@@ -2,10 +2,11 @@
 import { formatDateString } from '@/libs/date';
 import Image from 'next-export-optimize-images/image';
 import Link from 'next/link';
+import type { Category } from 'r3-blog';
 
 interface PostCardProps {
   slug: string
-  thumbnail: string | null;
+  thumbnail: string | undefined;
   title: string;
   date: Date;
   category: Category;
