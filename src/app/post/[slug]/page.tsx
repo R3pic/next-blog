@@ -10,7 +10,7 @@ import { Metadata } from 'next/types';
 import TagBox from '@/components/post/TagBox';
 import { components } from '@/components/MDX';
 import rehypePrettyCode from 'rehype-pretty-code';
-import { CategoryService, PostService } from 'r3-blog';
+import { PostService } from 'r3-blog';
 
 interface PostParams {
   slug: string
@@ -48,9 +48,7 @@ export async function generateStaticParams(): Promise<PostParams[]> {
 export default async function PostPage({ params }: PostProps) {
   const { slug } = await params;
   const postService = new PostService();
-  const categoryService = new CategoryService();
   const post = postService.getPost(decodeURIComponent(slug));
-  const category = categoryService.getCategory(post.category);
 
   if (!post)
     notFound();
@@ -60,7 +58,7 @@ export default async function PostPage({ params }: PostProps) {
       {/* 카테고리 트리 */}
       <CategoryTree
         title={post.title}
-        categoryPath={category.path}
+        categoryPath={post.category.path}
       />
       {/* 게시글 헤더 (제목 및 사진 포스트 날짜) */}
       <main data-pagefind-body>
@@ -68,8 +66,8 @@ export default async function PostPage({ params }: PostProps) {
           title={post.title}
           thumbnail={post.thumbnail}
           date={post.date}
-          categoryPath={category.path}
-          categoryDisplay={category.display}
+          categoryPath={post.category.path}
+          categoryDisplay={post.category.display}
         />
         <div className='p-8 flex flex-col grow break-keep'>
           <MDXRemote

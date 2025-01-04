@@ -1,7 +1,7 @@
 import PostList from '@/components/post/PostList';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next/types';
-import { CategoryService, PostService, TagService } from 'r3-blog';
+import { PostService, TagService } from 'r3-blog';
 
 interface Params {
   slug: string;
@@ -43,7 +43,7 @@ export default async function CategoryPage({ params }: Props) {
   const postService = new PostService();
   const tagService = new TagService(postService.getAllPost());
   const tag = decodeURIComponent(slug);
-  const posts = tagService.getAllPost(tag, new CategoryService());
+  const posts = tagService.getAllPost(tag);
   
   if (posts === undefined)
     notFound();

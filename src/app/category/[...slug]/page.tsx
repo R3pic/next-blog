@@ -2,7 +2,7 @@ import CategoryTree from '@/components/post/CategoryTree';
 import PostList from '@/components/post/PostList';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { CategoryService, PostService } from 'r3-blog';
+import { CategoryService } from 'r3-blog';
 
 interface CategoryParams {
   slug: string[]
@@ -42,7 +42,7 @@ export default async function CategoryPage({ params }: PageProps) {
   const categoryPath = slug.map(decodeURIComponent).join('/');
   const categoryService = new CategoryService();
   const category = categoryService.getCategory(categoryPath);
-  const posts = categoryService.injection(new PostService()).getAllPost(categoryPath);
+  const posts = categoryService.getAllPost(categoryPath);
   
   if (category === undefined)
     notFound();
