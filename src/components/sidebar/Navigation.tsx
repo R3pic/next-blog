@@ -37,7 +37,7 @@ export default function Navigation({ allCategory }: Props) {
           onClick={() => setIsExpanded(false)}
         />
       )}
-      <nav className={`${isExpanded ? 'flex flex-col' : 'hidden'} lg:flex h-full bg-[#EFE3C2] lg:bg-inherit lg:w-72 lg:mt-8 text-xl overflow-auto z-10`}
+      <nav className={`${isExpanded ? 'flex flex-col' : 'hidden'} lg:block h-full bg-[#EFE3C2] lg:bg-inherit lg:w-72 lg:mt-8 text-xl overflow-auto z-10`}
         onClick={(e) => e.stopPropagation()}
       >
         <ul className='px-8'>
