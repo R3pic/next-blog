@@ -1,0 +1,135 @@
+---
+title: "[JEST] Nanoid 사용 시 SyntaxError: Cannot use import statement outside a module 해결한 과정"
+description: "nanoid 라이브러리 사용 중 Jest 환경에서 발생한 esm import 문제를 맞닥뜨렸다."
+date: 2025-01-07
+tags: [jest, 2025]
+---
+# 문제 상황
+Nestjs의 테스트코드 실행 시 SyntaxError: Cannot use import statement outside a module가 발생한다.
+
+# 환경
+- `jest` : ^29.5.0
+- `ts-jest` : ^29.1.0
+- `typescript` : ^5.1.0
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+  }
+}
+```
+
+```json title="package.json"
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  }
+```
+# 문제 분석
+jest를 처음 써보는 입장에서 처음 발생한 문제는 상당히 당황스러웠다.
+![console-error](jest-nanoid/console-error.png)
+
+핵심 키워드
+- Jest encountered an unexpected token
+- SyntaxError: Cannot use import statement outside a modul
+
+에러문구를 전체적으로 확인해보면 모듈을 임포트하는 과정에서 에러가 발생하는 것을 알 수 있었다.
+
+# 과정
+## 초기시도
+가장 먼저 적용한 해결방법은 에러 문구에서 제공해준 방법이었다.
+```bash title="terminal"
+Here's what you can do:
+     • If you are trying to use ECMAScript Modules, see https://jestjs.io/docs/ecmascript-modules for how to enable it.
+     • If you are trying to use TypeScript, see https://jestjs.io/docs/getting-started#using-typescript
+     • To have some of your "node_modules" files transformed, you can specify a custom "transformIgnorePatterns" in your config.
+     • If you need a custom transformation specify a "transform" option in your config.
+     • If you simply want to mock your non-JS modules (e.g. binary assets) you can stub them out with the "moduleNameMapper" config option.
+```
+위에 적용된 방법외에 tsconfig를 수정하는 방법 전부 적용해보았지만, 나에게는 효과가 없었다.
+그리고 해결방법은 대부분 Babel과 프론트엔드와 관련된 자료가 많아 적용하기 힘들었다.
+
+## 치트?
+여러 검색어를 넣어 검색을 하던 도중, 완전히 동일한 상황을 발견했다.
+jest, nanoid, 테스트 수행 시 동일한 에러.
+
+하지만 이 게시글의 답변에는 아무도 답을 달아주지 않았고, 질문자 스스로 다운그레이드하는 방법을 선택했다는 글을 찾아냈다.
+
+nanoid 라이브러리가 Commonjs(require 방식)의 지원을 버전 @4부터 지원중단했기 때문이었다.
+
+그래서 @3으로 다운그레이드라는 방법밖에 없나, 자료를 더 찾아보던 도중 새로운 방법을 찾아냈다.
+
+그리고, 해결했다.
+
+# 최종 해결
+해결 방법은 모듈 자체를 모킹하는 방법이었다. 아주 단순한 해결 방법이었다.
+
+방법은 다음과 같다.
+
+1. jest 테스트 수행시 실행될 setup 파일 생성
+```typescript title="setup.ts"
+jest.mock('nanoid', () => {
+    return {
+        nanoid: () => 'ABCDEFZ'
+    }
+})
+```
+2. jest 콘피그 수정
+```json title="package.json" {17}
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node",
+    "setupFiles": ["../test/setup.ts"]
+  }
+```
+
+이렇게 작성하니, 테스트 전역에서 nanoid는 항상 'ABCDEFZ'를 반환하는 모듈이 되어있었다.
+
+만약 더 큰 라이브러리였다면 이런 해결방식은 적합하지 않았겠지만, `nanoid` 라이브러리가 랜덤한 id를 생성해주는 단순한 인터페이스를 가지고 있었기에 적용해도 문제가 없다고 판단했다.
+
+# 참고자료
+[Jest gives an error: "SyntaxError: Unexpected token export"](https://stackoverflow.com/questions/49263429/jest-gives-an-error-syntaxerror-unexpected-token-export)
+[Why can't jest handle nanoid? "SyntaxError: Cannot use import statement outside a module"](https://stackoverflow.com/questions/73538171/why-cant-jest-handle-nanoid-syntaxerror-cannot-use-import-statement-outside)
