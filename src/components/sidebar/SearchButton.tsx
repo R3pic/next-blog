@@ -48,7 +48,7 @@ export function SearchButton() {
       </button>
 
       {/* Modal */}
-      <div className={`fixed inset-0 bg-black bg-opacity-40 flex justify-center z-40
+      <div className={`fixed inset-0 bg-black bg-opacity-40 flex justify-center z-50
       ${isModalOpen ? 'visible' : 'invisible'}
       duration-700
       `}
