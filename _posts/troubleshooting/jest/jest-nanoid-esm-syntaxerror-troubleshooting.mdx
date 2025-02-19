@@ -130,6 +130,9 @@ jest.mock('nanoid', () => {
 
 만약 더 큰 라이브러리였다면 이런 해결방식은 적합하지 않았겠지만, `nanoid` 라이브러리가 랜덤한 id를 생성해주는 단순한 인터페이스를 가지고 있었기에 적용해도 문제가 없다고 판단했다.
 
+# 2025-02-19 수정
+이 글을 작성할 당시 테스트 코드를 통과시키기 위해 해당 작업을 진행했지만 결국 프로젝트 진행에 있어 어려움이 존재해, nanoid의 버전을 @3으로 다운그레이드하였다.
+
 # 참고자료
 [Jest gives an error: "SyntaxError: Unexpected token export"](https://stackoverflow.com/questions/49263429/jest-gives-an-error-syntaxerror-unexpected-token-export)
 [Why can't jest handle nanoid? "SyntaxError: Cannot use import statement outside a module"](https://stackoverflow.com/questions/73538171/why-cant-jest-handle-nanoid-syntaxerror-cannot-use-import-statement-outside)
