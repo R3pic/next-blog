@@ -32,7 +32,7 @@ export default function RightSidebar() {
   return (
     <>
       {/* 우측 사이드바 */}
-      <div className="fixed top-0  h-16
+      <div className="fixed top-0 h-16
         items-end
         bg-[#EFE3C2]
         w-full

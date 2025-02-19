@@ -27,9 +27,9 @@ export default function Navigation({ allCategory }: Props) {
   return (
     <>
       {/* 모바일용 열기 버튼 */}
-      <button className='block fixed top-4 left-3 lg:hidden' 
+      <button className='block fixed top-4 left-3 lg:hidden'
         onClick={() => setIsExpanded(!isExpanded)}>
-        <Icon icon='menu' className={`absolute size-8 ${isExpanded ? 'invisible' : 'visible'}`}/>
+        <Icon icon='menu' className={`size-8 ${isExpanded ? 'invisible' : 'visible'}`}/>
       </button>
       {isExpanded && (
         <div
